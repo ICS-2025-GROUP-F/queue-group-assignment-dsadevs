@@ -159,6 +159,24 @@ class PrintQueueManager:
                     jobs.append(self.queue[current])
                 current = (current + 1) % self.max_capacity
             return jobs
+    def handle_simultaneous_submissions(self, jobs: List[tuple]):
+        """
+        Accepts a list of job tuples and enqueues them concurrently.
+
+        Args:
+            jobs: List of tuples -> (user_id, job_id, priority)
+        """
+        threads = []
+
+        for job in jobs:
+            t = threading.Thread(target=self.enqueue_job, args=job)
+            threads.append(t)
+            t.start()
+
+        for t in threads:
+            t.join()
+
+        print("All jobs submitted concurrently.")
 
 
 # Test the module
@@ -186,4 +204,14 @@ if __name__ == "__main__":
     for i in range(4, 8):
         pq_manager.enqueue_job(f"user{i}", f"job{i}", i)
 
+    pq_manager.show_status()
+
+        # Test Module 4 - Simultaneous Submissions
+    print("Testing Module 4 - Concurrent Submissions")
+    job_list = [
+        ("u1", "j10", 2),
+        ("u2", "j11", 3),
+        ("u3", "j12", 1),
+    ]
+    pq_manager.handle_simultaneous_submissions(job_list)
     pq_manager.show_status()
