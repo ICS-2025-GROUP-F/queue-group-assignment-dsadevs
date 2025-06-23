@@ -11,6 +11,7 @@ class Job:
         self.job_id = job_id
         self.priority = priority
         self.submission_time = time.time()
+        self.submission_time = time.time()
         self.waiting_time = 0
 
     def __str__(self):
